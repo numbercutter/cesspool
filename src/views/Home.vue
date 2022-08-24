@@ -7,17 +7,21 @@
             <h1>CESSPOOL</h1>
           </div>
         </section>
+        <section class="middle">
+          <Vaults/>
+        </section>
       </div>
     </div>
   </body>
 </template>
 
 <script>
-// @ is an alias to /src
-
-
+import Vaults from './components/Vaults.vue'
 export default {
   name: 'Home',
+  components: {
+    Vaults
+  }
 }
 </script>
 
