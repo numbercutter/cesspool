@@ -1,32 +1,32 @@
 <template>
-  <div id="nav">
+  <div id="app">
+    <VueFinalModal
+      v-model="modal.messageModal.status"
+      classes="modal-container"
+      content-class="modal-content-transfer"
+    >
+      <div class="modal__content">
+        <p>{{modal.messageModal.message}}</p>
+        
+      </div>
+    </VueFinalModal>
     <router-link to="/"></router-link>
     <Navigation/>
-    <GetSafariworldBalance/>
-    <VueFinalModal
-        v-model="modal.loginModal"
-        classes="modal-container-login"
-        content-class="modal-content-login"
-      >
-        <div class="modal__content">
-          <p>You must be logged in via MetaMask or WalletConnect to utilize the Safari World Vaults</p>
-        </div>
-    </VueFinalModal>
+
   </div>
   <router-view/>
 </template>
 
 <script>
 import Navigation from './components/Navigation.vue';
-import GetSafariworldBalance from './components/GetSafariworldBalance.vue';
 import { VueFinalModal } from "vue-final-modal";
 import { useStore } from 'vuex';
 import { computed } from 'vue';
+
 export default {
   name: 'App',
   components: {
     Navigation,
-    GetSafariworldBalance,
     VueFinalModal
   },
   setup() {

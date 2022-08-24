@@ -2,21 +2,24 @@
   <header :class="{ 'scrolled-nav': scrolledNav }" class="p-shadow-4">
    <nav >
      <ul v-show="!mobile" class="navigation ">
-        <li><router-link :to="{ name: 'SafariWorld' }" class="link">Home</router-link></li>
+        <li><router-link :to="{ name: 'Home' }" class="link">Home</router-link></li>
+        <!--
         <li><router-link :to="{ name: 'Vaults' }" class="link">Vaults</router-link></li>
         <li><router-link :to="{ name: 'WildNFTs' }" class="link">WildNFTs</router-link></li>
         <li><router-link :to="{ name: 'LitePaper' }" class="link">Litepaper</router-link></li>
+        -->
      </ul>
      <div class="icon">
        <i @click="toggleMobileNav" v-show="mobile" class="far fa-bars m-nav" :class="{ 'icon-active': mobileNav }"></i>
      </div>
      <transition name="mobile-nav">
        <ul v-show="mobileNav" class="dropdown-nav">
-          <li @click="toggleMobileNav"><router-link :to="{ name: 'SafariWorld' }" class="link">Home</router-link></li>
+          <li @click="toggleMobileNav"><router-link :to="{ name: 'Home' }" class="link">Home</router-link></li>
+          <!--
           <li @click="toggleMobileNav"><router-link :to="{ name: 'Vaults' }" class="link">Vaults</router-link></li>
           <li @click="toggleMobileNav"><router-link :to="{ name: 'WildNFTs' }" class="link">WildNFTs</router-link></li>
           <li @click="toggleMobileNav"><router-link :to="{ name: 'LitePaper' }" class="link">Litepaper</router-link></li>
-
+          -->
        </ul>
      </transition>
    </nav>
@@ -79,7 +82,7 @@ header {
   background-color: rgb(0, 0, 0);
   width: 100%;
   position: fixed;
-  bottom: 0;
+  top: 0;
   transition: .3s ease all;
   padding: 10px;
   nav {
@@ -175,7 +178,7 @@ header {
       height: 100%;
       padding: 0 !important;
       background-color: #000000;
-      bottom:0;
+      top:0;
       left:0;
       margin-left: 0;
 
