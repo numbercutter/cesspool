@@ -93,8 +93,7 @@ export default {
 .outer {
   padding: 50px 0px 0px;
   background-image: url('./assets/img/dusky.webp');
-  background-size: fill; 
-  background-repeat: round; 
+  background-size: cover; 
   background-attachment: fixed;
   color: black;
   //animation: 300s para infinite linear;
