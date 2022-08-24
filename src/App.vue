@@ -91,10 +91,11 @@ export default {
       }
     }
     window.ethereum.on('accountsChanged', (accounts) => {
-        // If user has locked/logout from MetaMask, this resets the accounts array to empty
         handleCurrentUser()
         if (!accounts.length) {
           console.log("accountlenght")
+          setUser(0)
+          setAccountAddress(0)
         }
     });
     onMounted(() => {
