@@ -220,7 +220,7 @@ header {
 
 .scrolled-nav {
   //background-color: rgb(0, 238, 255);
-  background-image: linear-gradient(rgb(255, 241, 173), rgb(187, 176, 122));
+  background-image: linear-gradient(rgb(255, 0, 234), rgb(155, 122, 187));
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 2px 4px -1px rgba(0, 0, 0, 0.06);
   padding: 10px;
 
