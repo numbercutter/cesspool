@@ -4,7 +4,7 @@
       <div class="outer">
         <section class="top">
           <div>
-          <img alt="logo" src="./assets/img/cess_logo2.webp" class="logo">
+            <h1>CESSPOOL</h1>
           </div>
         </section>
       </div>
