@@ -1,32 +1,46 @@
 <template>
   <div id="app">
     <VueFinalModal
+        v-model="modal.loginModal"
+        classes="modal-container-login"
+        content-class="modal-content-login"
+      >
+        <div class="modal__content">
+          <p>You must be logged in via MetaMask or WalletConnect to utilize the CESSPOOL Vaults</p>
+        </div>
+    </VueFinalModal>
+    <VueFinalModal
       v-model="modal.messageModal.status"
       classes="modal-container"
       content-class="modal-content-transfer"
     >
       <div class="modal__content">
         <p>{{modal.messageModal.message}}</p>
-        
       </div>
     </VueFinalModal>
-    <router-link to="/"></router-link>
-    <Navigation/>
-
+    <template v-if="isAuthenticated">
+      <div></div>
+    </template>
+    <template v-else>
+      <nav class="nav-middle">
+        <ul id="swt-nav">
+          <li><button @click="metaLogin">Metamask</button></li>
+        </ul>
+      </nav>
+    </template>
   </div>
   <router-view/>
 </template>
 
 <script>
-import Navigation from './components/Navigation.vue';
 import { VueFinalModal } from "vue-final-modal";
 import { useStore } from 'vuex';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { ethers } from "ethers";
 
 export default {
   name: 'App',
   components: {
-    Navigation,
     VueFinalModal
   },
   setup() {
@@ -41,13 +55,44 @@ export default {
     }
 
     const setModal = (modal) => store.commit('setModal', modal)
-    //const setUserNfts = (nfts) => store.commit("setUserNfts", nfts);
-
-    
-
+    const setUser = (payload) => store.commit('setUser', payload)
+    const setAccountAddress = (address) => store.commit('setAccountAddress', address)
     setModal(modals)
 
+    const metaLogin = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner()
+        const accounts = await provider.listAccounts();
+        setUser(signer)
+        setAccountAddress(accounts[0])
+        
+      } catch (error) {
+        store.state.modal["loginModal"] = true
+      }
+    }
+
+    const handleCurrentUser = async () => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const accounts = await provider.listAccounts();
+      
+      if (accounts.length > 0) {
+        const signer = provider.getSigner()
+        setUser(signer)
+        setAccountAddress(accounts[0])
+      } else {
+        store.state.modal["loginModal"] = true
+      }
+    }
+
+    onMounted(() => {
+      handleCurrentUser()
+    })
     return {
+      metaLogin,
+      isAuthenticated: computed(() => Object.keys(store.state.user).length > 0),
+      user: computed(() => store.state.user),
       modal: computed(() => store.state.modal),
     }
   }
