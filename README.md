@@ -1,5 +1,5 @@
 # cesspool
-vue.js/ethers.js staking dapp
+cesspool dapp
 
 ## Project setup
 ```
