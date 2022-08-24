@@ -19,7 +19,12 @@
       </div>
     </VueFinalModal>
     <template v-if="isAuthenticated">
-      <div></div>
+      <nav class="nav-middle">
+        <ul id="swt-nav">
+          <li>Connected</li>
+          <li>{{ address.slice(0, 4) }}...{{ address.slice(address.length - 4) }}  </li>
+        </ul>
+      </nav>
     </template>
     <template v-else>
       <nav class="nav-middle">
@@ -85,7 +90,13 @@ export default {
         store.state.modal["loginModal"] = true
       }
     }
-
+    window.ethereum.on('accountsChanged', (accounts) => {
+        // If user has locked/logout from MetaMask, this resets the accounts array to empty
+        handleCurrentUser()
+        if (!accounts.length) {
+          console.log("accountlenght")
+        }
+    });
     onMounted(() => {
       handleCurrentUser()
     })
@@ -94,6 +105,7 @@ export default {
       isAuthenticated: computed(() => Object.keys(store.state.user).length > 0),
       user: computed(() => store.state.user),
       modal: computed(() => store.state.modal),
+      address: computed(() => store.state.address)
     }
   }
 }

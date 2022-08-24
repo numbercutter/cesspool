@@ -114,17 +114,18 @@ export default {
 
   width: 100%;
   padding: 20px 0px 40px;
-  color: rgb(0, 253, 110);
+  color: rgb(186, 253, 0);
+  
   
   h1 {
     font-family: headerFont;
-    font-size: 1.5em;
-    text-shadow: grey;
+    font-size: 4em;
+    text-shadow: 2px 2px #575757;
     @media (min-width: 400px) {
-        font-size: 2em;
+        font-size: 6em;
       }
     @media (min-width: 750px) {
-      font-size: 6em;
+      font-size: 10em;
     }
   }
   p {
