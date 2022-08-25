@@ -71,7 +71,7 @@ import { inject, ref, onMounted, computed, watch } from 'vue'
 import { useStore } from "vuex";
 import slider from "vue3-slider"
 import { BigNumber } from 'ethers';
-import Web3 from "web3";
+import { ethers } from "ethers";
 import { VueFinalModal } from "vue-final-modal";
 
 
@@ -83,7 +83,6 @@ export default {
     },
     setup() {
 
-        const $moralis = inject('$moralis')
         const store = useStore();
 
         const lockNumber = ref(1)
