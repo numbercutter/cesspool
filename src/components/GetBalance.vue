@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ cessBalance }}
+    {{ address }}
   </div>
 </template>
 
@@ -16,10 +16,11 @@ export default {
         const address = ref(store.state.address)
 
         const getBalance = async () => {
-            const user = store.state.user
-            console.log(user)
+            address.value = store.state.address
+            console.log(address)
+            return address
         }
-        watch(()=>store.getters.user, function() {
+        watch(()=>store.getters.address, function() {
             getBalance()
         });
         onMounted(() => {
