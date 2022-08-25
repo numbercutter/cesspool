@@ -66,7 +66,7 @@ export default {
 
     const metaLogin = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner()
         const accounts = await provider.listAccounts();
@@ -79,7 +79,7 @@ export default {
     }
 
     const handleCurrentUser = async () => {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
       const accounts = await provider.listAccounts();
       
       if (accounts.length > 0) {
@@ -98,6 +98,17 @@ export default {
           setAccountAddress(0)
         }
     });
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    provider.on("network", (newNetwork, oldNetwork) => {
+        console.log(newNetwork)
+        // When a Provider makes its initial connection, it emits a "network"
+        // event with a null oldNetwork along with the newNetwork. So, if the
+        // oldNetwork exists, it represents a changing network
+        if (oldNetwork) {
+            window.location.reload();
+        }
+    });
+
     onMounted(() => {
       handleCurrentUser()
     })
