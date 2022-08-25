@@ -116,13 +116,18 @@ export default {
       }
     }
     window.ethereum.on('accountsChanged', (accounts) => {
-        handleCurrentUser()
-        if (!accounts.length) {
+        if (accounts.length > 0) {
+          const signer = provider.getSigner()
+          setUser(signer)
+          setAccountAddress(accounts[0])
+        } else {
+          store.state.modal["loginModal"] = true
           console.log("accountlenght")
           setUser(0)
           setAccountAddress(0)
         }
     });
+    
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     provider.on("network", (newNetwork, oldNetwork) => {
         console.log(newNetwork)
