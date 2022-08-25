@@ -23,6 +23,7 @@
         <ul id="swt-nav">
           <li>Connected</li>
           <li>{{ address.slice(0, 4) }}...{{ address.slice(address.length - 4) }}  </li>
+          <li><GetBalance/></li>
         </ul>
       </nav>
     </template>
@@ -42,12 +43,16 @@ import { VueFinalModal } from "vue-final-modal";
 import { useStore } from 'vuex';
 import { computed, onMounted } from 'vue';
 import { ethers } from "ethers";
+import GetBalance from './components/GetBalance.vue';
+
+
 
 export default {
   name: 'App',
   components: {
-    VueFinalModal
-  },
+    VueFinalModal,
+    GetBalance,
+},
   setup() {
     const store = useStore()
 
@@ -67,6 +72,7 @@ export default {
     const metaLogin = async () => {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+        
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner()
         const accounts = await provider.listAccounts();
@@ -80,6 +86,25 @@ export default {
 
     const handleCurrentUser = async () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+      const chain = await provider.getNetwork(1)
+      if (chain.name != "bnb") {
+          store.state.modal["messageModal"]["message"] = "switching network...";
+          store.state.modal["messageModal"]["status"] = true;
+          window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [{
+                  chainId: "0x38",
+                  rpcUrls: ['https://bsc-dataseed1.binance.org/'],
+                  chainName: "Smart Chain",
+                  nativeCurrency: {
+                      name: "BNB",
+                      symbol: "BNB",
+                      decimals: 18
+                  },
+                  blockExplorerUrls: ["https://bscscan.com"]
+              }]
+          });
+        }
       const accounts = await provider.listAccounts();
       
       if (accounts.length > 0) {
