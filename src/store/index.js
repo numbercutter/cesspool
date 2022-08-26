@@ -5,11 +5,12 @@ const store = createStore({
     return {
       user: {},
       address: null,
+      provider: null,
       nfts: [],
       txn: [],
       modal: [],
       swtnfts: {},
-      swt: null,
+      cess: null,
     }
   },
   getters: {
@@ -24,6 +25,9 @@ const store = createStore({
     setAccountAddress (state, address) {
       state.address = address
     },
+    setProvider (state, provider) {
+      state.provider = provider
+    },
     setUserNfts (state, nfts) {
       state.nfts = nfts
     },
@@ -36,8 +40,8 @@ const store = createStore({
     setSwtNfts (state, swtnfts) {
       state.swtnfts = swtnfts
     },
-    setSwt (state, swt) {
-      state.swt = swt
+    setCess (state, cess) {
+      state.cess = cess
     },
   }
 })

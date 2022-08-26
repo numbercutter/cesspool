@@ -47,6 +47,7 @@ import GetBalance from './components/GetBalance.vue';
 
 
 
+
 export default {
   name: 'App',
   components: {
@@ -67,6 +68,8 @@ export default {
     const setModal = (modal) => store.commit('setModal', modal)
     const setUser = (payload) => store.commit('setUser', payload)
     const setAccountAddress = (address) => store.commit('setAccountAddress', address)
+    const setProvider = (provider) => store.commit('setProvider', provider)
+
     setModal(modals)
 
     const metaLogin = async () => {
@@ -76,6 +79,7 @@ export default {
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner()
         const accounts = await provider.listAccounts();
+        setProvider(provider)
         setUser(signer)
         setAccountAddress(accounts[0])
         
@@ -109,6 +113,7 @@ export default {
       
       if (accounts.length > 0) {
         const signer = provider.getSigner()
+        setProvider(provider)
         setUser(signer)
         setAccountAddress(accounts[0])
       } else {
@@ -118,13 +123,15 @@ export default {
     window.ethereum.on('accountsChanged', (accounts) => {
         if (accounts.length > 0) {
           const signer = provider.getSigner()
+          setProvider(provider)
           setUser(signer)
           setAccountAddress(accounts[0])
         } else {
           store.state.modal["loginModal"] = true
           console.log("accountlenght")
+          setProvider(null)
           setUser(0)
-          setAccountAddress(0)
+          setAccountAddress(null)
         }
     });
     

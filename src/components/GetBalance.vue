@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { ethers } from "ethers";
+
 //import { cessVaultAddress, cessVaultABI } from './contracts/cess4cess.sol/cess4cess.js';
 import { cesspoolAddress, cesspoolABI } from './contracts/cesspool.sol/cesspool.js';
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useStore } from "vuex";
 
 export default {
@@ -16,11 +16,12 @@ export default {
     setup() {
         const store = useStore()
         const balance = ref(0)
+        const setCess = (cess) => store.commit('setCess', cess)
 
         const getBalance = async () => {
             const { Contract } = require('ethers');
             const address = store.state.address
-            const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+            const provider = store.state.provider
             const contract = new Contract(cesspoolAddress, cesspoolABI, provider);
             const amount = await contract.balanceOf(address);
             const result = amount / 1e18
@@ -28,6 +29,8 @@ export default {
             const num = rounded1 - rounded1 % 1;
             const internationalNumberFormat = new Intl.NumberFormat('en-US')
             balance.value =internationalNumberFormat.format(num)
+            const cess = balance.value
+            setCess(cess)
             return balance.value;
         }
         watch(()=>store.getters.address, function() {
@@ -38,7 +41,8 @@ export default {
         })
 
         return {
-            balance
+            balance,
+            cess: computed(() => store.state.cess),
         }
     }
 }
