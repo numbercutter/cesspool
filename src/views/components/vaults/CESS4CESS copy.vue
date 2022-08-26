@@ -71,7 +71,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useStore } from "vuex";
 import slider from "vue3-slider"
 import { BigNumber } from 'ethers';
-//import { ethers } from "ethers";
+import { ethers } from "ethers";
 import { VueFinalModal } from "vue-final-modal";
 
 
@@ -83,12 +83,8 @@ export default {
     },
     setup() {
 
-        const { Contract } = require('ethers');
-        
-
         const store = useStore();
-        const provider = store.state.user
-        console.log(provider)
+
         const lockNumber = ref(1)
         const days = ref(1)
         const balanceAmount = ref(null)
@@ -101,12 +97,18 @@ export default {
         const getBalance = async () => {
             await $moralis.enableWeb3()
             const chainId = await $moralis.chainId;
+            if ( chainId != 56 ) {
+                store.state.modal["messageModal"]["message"] = "switching network...";
+                store.state.modal["messageModal"]["status"] = true;
+                const newId = 56;
+                await $moralis.switchNetwork(newId);
+                
+                store.state.modal["messageModal"]["status"] = false;
+                getBalance()
+                return
+            }
 
-            const getBalance = async (options) => {
-                const contract = new Contract(tokenAddress, abi, options.provider);
-                const balance = await contract.balanceOf(options.address);
-                return balance.toString();
-            };
+
             const balancecess = {contractAddress: cesspoolAddress, functionName: "balanceOf(address)", abi: cesspoolABI,
                     params: {
                         account: store.state.address,
