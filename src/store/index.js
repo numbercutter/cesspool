@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import { cesspoolAddress, cesspoolABI } from './contracts/cesspool.sol/cesspool.js';
 
 const store = createStore({
   state () {
@@ -11,6 +12,7 @@ const store = createStore({
       modal: [],
       swtnfts: {},
       cess: null,
+      cesspoolContract: {address: cesspoolAddress, abi: cesspoolABI}
     }
   },
   getters: {

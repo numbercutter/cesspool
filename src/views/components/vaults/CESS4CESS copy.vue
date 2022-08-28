@@ -71,7 +71,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useStore } from "vuex";
 import slider from "vue3-slider"
 import { BigNumber } from 'ethers';
-import { ethers } from "ethers";
+//import { ethers } from "ethers";
 import { VueFinalModal } from "vue-final-modal";
 
 
