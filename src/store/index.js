@@ -18,6 +18,9 @@ const store = createStore({
   getters: {
     address(state) {
       return state.address
+    },
+    cess(state) {
+      return state.cess
     }
   },
   mutations: {

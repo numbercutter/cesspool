@@ -26,6 +26,7 @@
           <li><GetBalance/></li>
         </ul>
       </nav>
+      <router-view/>
     </template>
     <template v-else>
       <nav class="nav-middle">
@@ -35,7 +36,7 @@
       </nav>
     </template>
   </div>
-  <router-view/>
+  
 </template>
 
 <script>

@@ -84,15 +84,16 @@ export default {
 
         const { Contract } = require('ethers');
         //const cesspoolSC = new Contract(store.state.cesspoolContract.address, store.state.cesspoolContract.abi, provider);
-        const cess4cessSC = new Contract(cessVaultAddress, cessVaultABI, provider);
-
         const store = useStore();
-        const provider = store.state.user
-
-        console.log(provider)
+        const provider = store.state.provider
+        const signer = store.state.user
+        console.log(signer)
+        const cess4cessSC = new Contract(cessVaultAddress, cessVaultABI, provider);
+        
         const lockNumber = ref(1)
         const days = ref(1)
         const balanceAmount = ref(store.state.cess)
+        console.log(balanceAmount)
         const stakedAmount = ref(null)
         const earningsAfterFee = ref(null)
         const ror = ref(null)
@@ -119,43 +120,20 @@ export default {
             const amount = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals));
             const lockAmount = amount
 
-            const allowancecess = {contractAddress: store.state.cesspoolContract.address, functionName: "allowance(address,address)", abi: store.state.cesspoolContract.abi,
-                params: {
-                    owner: store.state.address,
-                    spender: cessVaultAddress.toString()
-                }
-            };
-            store.state.modal["loadingModal"] = true
-            const transactionAllowance = await $moralis.executeFunction(allowancecess);
+            const transactionAllowance = await cess4cessSC.allowance(store.state.address, cessVaultAddress.toString())
 
             const allowanceAmount = transactionAllowance.toString()
 
 
             if (Number(allowanceAmount) < Number(lockAmount)) {
-                const approvecess = {contractAddress: store.state.cesspoolContract.address, functionName: "approve(address,uint256)", abi: store.state.cesspoolContract.abi,
-                    params: {
-                        spender: cessVaultAddress.toString(),
-                        amount: "1000000000000000000000000000"
-                    }
-                };
-                
-                const transactionApprove = await $moralis.executeFunction(approvecess);
-                await transactionApprove.wait();
-            }
-            const lock = {
-                contractAddress: cessVaultAddress,
-                functionName: "lockLiquidity",
-                abi: cessVaultABI,
-                params: {
-                    _amount: lockAmount,
-                    _timeLock: lockTime.toString()
 
-                }
-            };
-            const transactionLock = await $moralis.executeFunction(lock);
+                const transactionApprove = await cess4cessSC.approve(cessVaultAddress.toString(), "1000000000000000000000000000")
+                console.log(transactionApprove)
+            }
+
+            const transactionLock = await cess4cessSC.lockLiquidity(lockAmount, lockTime.toString())
             const link =  `https://bscscan.com/tx/${transactionLock.hash}`
 
-            await transactionLock.wait();
             store.state.modal["loadingModal"] = false
             store.state.modal["txnModal"]["hash"] = link;
             store.state.modal["txnModal"]["status"] = true;
@@ -164,22 +142,18 @@ export default {
         }
         const extractLiquidity = async () => {
 
-            const unlock = {contractAddress: cessVaultAddress,functionName: "extractLiquidity",abi: cessVaultABI,};
+            const transactionUnlock = await cess4cessSC.extractLiquidity()
+
             store.state.modal["loadingModal"] = true
-            const transactionUnlock = await $moralis.executeFunction(unlock);
             const link =  `https://bscscan.com/tx/${transactionUnlock.hash}`
-            await transactionUnlock.wait();
             store.state.modal["loadingModal"] = false
             store.state.modal["txnModal"]["hash"] = link;
             store.state.modal["txnModal"]["status"] = true;
 
         }
         const extractEarnings = async () => {
-
-            const earnings = {contractAddress: cessVaultAddress,functionName: "extractEarnings",abi: cessVaultABI};
-            const transactionExtractEarnings = await $moralis.executeFunction(earnings);
-            await transactionExtractEarnings.wait();
-
+            const earnings = await cess4cessSC.extractEarnings()
+            console.log(earnings)
         }
 
         const getData = async() => {
@@ -197,12 +171,12 @@ export default {
                 const blocksPassed = currentBlock - lastBlockFee;
                 const feeIn = blocksPassed * rewardPerBlock;
                 lockTokenFeePrice = parseFloat(feeIn) * 1e18 / parseFloat(totalLiquidityLocked) + parseFloat(lockTokenFeePrice);
-                const lastPriceEarningsExtracted = await provider.lastPriceEarningsExtracted(store.state.address)
-                const lockingTime = await provider.lockingTime(store.state.address)
+                const lastPriceEarningsExtracted = await cess4cessSC.lastPriceEarningsExtracted(store.state.address)
+                const lockingTime = await cess4cessSC.lockingTime(store.state.address)
 
                 const myPrice = lockTokenFeePrice - lastPriceEarningsExtracted;
                 const earnings = amountLocked * myPrice / 1e18;
-                const devTreasuryPercentage = await provider.calcDevTreasuryPercentage(lockingTime.toString())
+                const devTreasuryPercentage = await cess4cessSC.calcDevTreasuryPercentage(lockingTime.toString())
                 const devTreasuryEarnings = earnings * devTreasuryPercentage / 1e20
                 const remaining = earnings - devTreasuryEarnings
                 earningsAfterFee.value = (remaining / 1e18).toFixed(2)
@@ -248,7 +222,8 @@ export default {
             }
         }
         const checkCurrentUser = () => {
-            if (Object.keys(store.state.user).length > 0) {
+            console.log(provider)
+            if (provider) {
                 getStaked()
             } else {
                 store.state.modal["loginModal"] = true;
@@ -256,7 +231,7 @@ export default {
             }
             }
 
-        watch(()=>store.getters.user, function() {
+        watch(()=>store.getters.address, function() {
             checkCurrentUser()
         });
 
@@ -276,7 +251,7 @@ export default {
             balanceAmount,
             stakedAmount,
             vaultModal,
-            isBalanced: computed(() => balanceAmount.value > 0),
+            isBalanced: computed(() => provider),
             isStaked: computed(() => stakedAmount.value > 0),
             isUnlocked: computed(() => timeRemaining.value == "stake is unlocked")
         }

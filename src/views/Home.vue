@@ -8,7 +8,7 @@
           </div>
         </section>
         <section class="middle">
-          <!--<Vaults/>-->
+          <Vaults/>
         </section>
       </div>
     </div>
@@ -16,9 +16,12 @@
 </template>
 
 <script>
-//import Vaults from './components/Vaults.vue'
+import Vaults from './components/Vaults.vue'
 export default {
   name: 'Home',
+  components: {
+    Vaults
+  }
 }
 </script>
 
