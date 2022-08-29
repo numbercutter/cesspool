@@ -156,7 +156,7 @@ export default {
   }
 }
 .middle {
-  background-image: linear-gradient(rgb(0, 253, 110), rgba(255, 255, 255, 0.788));
+  //background-image: linear-gradient(rgb(0, 253, 110), rgba(255, 255, 255, 0.788));
   width: 100%;
   h1 {
     font-family: headerFont;
