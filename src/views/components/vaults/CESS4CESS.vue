@@ -86,10 +86,7 @@ export default {
         
         const store = useStore();
         const provider = store.state.provider
-        const address = store.state.address
-        console.log(address)
         const signer = provider.getSigner();
-        console.log(signer)
         const cesspoolSC = new Contract(store.state.cesspoolContract.address, store.state.cesspoolContract.abi, signer);
         const cess4cessSC = new Contract(cessVaultAddress, cessVaultABI, signer);
         
@@ -236,7 +233,7 @@ export default {
             }
 
         watch(()=>store.getters.cess, function() {
-            checkCurrentUser()
+            getStaked()
         });
 
         onMounted(() => {
