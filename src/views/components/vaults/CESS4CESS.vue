@@ -83,12 +83,15 @@ export default {
     setup() {
 
         const { Contract } = require('ethers');
-        //const cesspoolSC = new Contract(store.state.cesspoolContract.address, store.state.cesspoolContract.abi, provider);
+        
         const store = useStore();
         const provider = store.state.provider
-        const signer = store.state.user
+        const address = store.state.address
+        console.log(address)
+        const signer = provider.getSigner();
         console.log(signer)
-        const cess4cessSC = new Contract(cessVaultAddress, cessVaultABI, provider);
+        const cesspoolSC = new Contract(store.state.cesspoolContract.address, store.state.cesspoolContract.abi, signer);
+        const cess4cessSC = new Contract(cessVaultAddress, cessVaultABI, signer);
         
         const lockNumber = ref(1)
         const days = ref(1)
@@ -100,6 +103,7 @@ export default {
         const timeRemaining = ref(null)
         const vaultModal = ref(false)
 
+
         const getStaked = async () => {
             
             const transactionStaked = await cess4cessSC.getAmountLocked(store.state.address)
@@ -107,9 +111,9 @@ export default {
             const cess2 = num2 / 1e18
             const rounded2 = Number(cess2.toFixed(2));
             stakedAmount.value = rounded2 - rounded2 % 1;
-
+            balanceAmount.value = store.state.cess
             getData()
-            return  stakedAmount
+            return  stakedAmount, balanceAmount
         }
 
         const lockLiq = async () => {
@@ -120,14 +124,14 @@ export default {
             const amount = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals));
             const lockAmount = amount
 
-            const transactionAllowance = await cess4cessSC.allowance(store.state.address, cessVaultAddress.toString())
+            const transactionAllowance = await cesspoolSC.allowance(store.state.address, cessVaultAddress.toString())
 
             const allowanceAmount = transactionAllowance.toString()
 
 
             if (Number(allowanceAmount) < Number(lockAmount)) {
 
-                const transactionApprove = await cess4cessSC.approve(cessVaultAddress.toString(), "1000000000000000000000000000")
+                const transactionApprove = await cesspoolSC.approve(cessVaultAddress.toString(), "1000000000000000000000000000")
                 console.log(transactionApprove)
             }
 
@@ -231,7 +235,7 @@ export default {
             }
             }
 
-        watch(()=>store.getters.address, function() {
+        watch(()=>store.getters.cess, function() {
             checkCurrentUser()
         });
 
@@ -251,7 +255,7 @@ export default {
             balanceAmount,
             stakedAmount,
             vaultModal,
-            isBalanced: computed(() => provider),
+            isBalanced: computed(() => balanceAmount.value > 0),
             isStaked: computed(() => stakedAmount.value > 0),
             isUnlocked: computed(() => timeRemaining.value == "stake is unlocked")
         }

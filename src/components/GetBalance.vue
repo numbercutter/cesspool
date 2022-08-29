@@ -27,10 +27,10 @@ export default {
             const result = amount / 1e18
             const rounded1 = Number(result.toFixed(0));
             const num = rounded1 - rounded1 % 1;
+            setCess(num)
             const internationalNumberFormat = new Intl.NumberFormat('en-US')
             balance.value =internationalNumberFormat.format(num)
-            const cess = balance.value
-            setCess(cess)
+            
             return balance.value;
         }
         watch(()=>store.getters.address, function() {
