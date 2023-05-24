@@ -4,11 +4,12 @@
             <div id="grid-view">
                 <div class="title_container">
                     <div class="header_container">
-                <h2>CESS Vault</h2>
-                </div></div>
-                <div class="content_container">
+                <h2>PSwap V2 <br> CESS/BNB LP Vault</h2>
+                    </div>
+                    </div>
+                    <div class="content_container">
                     <div class="writeup_container">
-                <span><p>Aprox. APR: <span class="fill"> {{ ror }}  </span> %</p></span>
+                <span><p>Daily Tokens Distributed Amongst Stakers: <span class="fill"> {{ ror }}  </span> $CESS</p></span>
                 <span><p>Available Earnings: <span class="fill"> {{ earningsAfterFee }}  </span> $CESS</p></span>
                 <button @click="vaultModal = true">ENTER</button>
                 </div></div>
@@ -18,11 +19,12 @@
             <div id="grid-view">
                 <div class="title_container">
                     <div class="header_container">
-                <h2>CESS Vault</h2>
-                    </div></div>
+                <h2>PSwap V2 <br> CESS/BNB LP Vault</h2>
+                    </div>
+                    </div>
                     <div class="content_container">
                     <div class="writeup_container">
-                <span><p>Aprox. APR/yr: <span class="fill"> {{ ror }}  </span> %</p></span>
+                <span><p>Daily Tokens Distributed Amongst Stakers: <span class="fill"> {{ ror }}  </span> $CESS</p></span>
                 <button @click="vaultModal = true">ENTER</button>
                 </div></div>
             </div>
@@ -32,12 +34,12 @@
                 <div id="staking_container">
                     <!--time left -->
                     <div class="header">
-                        <h1>CESSPOOL VAULT</h1>
-                        <span><p>Aprox. APR/yr: <span class="fill"> {{ ror }}  </span> %</p></span>
+                        <h1>PSwap V2 <br> CESS/BNB LP VAULT</h1>
+                        <span><p>Daily Tokens Distributed Amongst Stakers: <span class="fill"> {{ ror }}  </span> $CESS</p></span>
                     </div>
                     <div class="lock">
                         <slider v-model="lockNumber" color="black" track-color="pink" :height='15' :max="balanceAmount" :min="0"/>
-                        <span><p>Locking Amount: <span class="fill"> {{ lockNumber }}  </span> $CESS</p></span>
+                        <span><p>Locking Amount: <span class="fill"> {{ lockNumber }}  </span> CESS/BNB LP</p></span>
                         <slider v-model="days" color="black" track-color="red" :height='15' :max="365" :min="1"/>
                         <span><p>Locking Time (BETWEEN 1 AND 365 DAYS): <span class="fill"> {{ days }}  </span> DAY(S)</p></span>
                         <br>
@@ -45,9 +47,9 @@
                     </div>
                     <template v-if="isStaked">
                         <div class="unlock">
-                            <span><p>Currently Staked: <span class="fill"> {{ stakedAmount }}  </span> $CESS</p></span>
-                            <span><p>Available Earnings: <span class="fill"> {{ earningsAfterFee }}  </span> $CESS</p></span>
-                            <span><p>Lock Time Remaining: <span class="fill"> {{ timeRemaining }}  </span> Days</p></span>
+                            <span><p>Currently Staked: <span class="fill"> {{ stakedAmount }}  </span> CESS/BNB LP </p></span>
+                            <span><p>Available Earnings: <span class="fill"> {{ earningsAfterFee }}  </span> $CESS </p></span>
+                            <span><p>Lock Time Remaining: <span class="fill"> {{ timeRemaining }}  </span> Days </p></span>
 
                             <br>
                             <template v-if="isUnlocked">
@@ -62,10 +64,9 @@
             </template>
             <template v-else>
                 <div class="header">
-                    <h1>CESS4CESS VAULT</h1>
-                    <span><p>Aprox. APR/yr: <span class="fill"> {{ ror }}  </span> %</p></span>
-                    <p>You must own $CESS token to utilize this vault...</p>
-                    <button @click="extractLiquidity">BUY HERE</button>
+                    <h1>PSwap V2 <br> CESS/BNB LP VAULT</h1>
+                    <span><p>Daily Tokens Distributed Amongst Stakers: <span class="fill"> {{ ror }}  </span> $CESS</p></span>
+                    <p>You must own PSwap V2 CESS/BNB LP  token to utilize this vault...</p>
                     <button @click="vaultModal = false">Close</button>
                 </div>
             </template>
@@ -75,7 +76,7 @@
 </template>
 
 <script>
-import { cessVaultAddress, cessVaultABI } from './contracts/cess4cess.sol/cess4cess.js';
+import { pswapCessBnbVaultAddress, pswapCessBnbVaultABI, erc20ABI, pswapCessBnbAddress } from './contracts/pswapcessbnb.sol/pswapcessbnb.js';
 import { ref, onMounted, computed, watch } from 'vue'
 import { useStore } from "vuex";
 import slider from "vue3-slider"
@@ -85,7 +86,7 @@ import { VueFinalModal } from "vue-final-modal";
 
 
 export default {
-    name: 'cess4cess',
+    name: 'PSWAPCESSBNB',
     components: {
         slider,
         VueFinalModal
@@ -97,13 +98,13 @@ export default {
         const store = useStore();
         const provider = store.state.provider
         const signer = provider.getSigner();
-        const cesspoolSC = new Contract(store.state.cesspoolContract.address, store.state.cesspoolContract.abi, signer);
-        const cess4cessSC = new Contract(cessVaultAddress, cessVaultABI, signer);
+        const cesspoolSC = new Contract(pswapCessBnbAddress, erc20ABI, signer);
+        const cess4cessSC = new Contract(pswapCessBnbVaultAddress, pswapCessBnbVaultABI, signer);
         
         const lockNumber = ref(1)
         const days = ref(1)
-        const balanceAmount = ref(store.state.cess)
-        console.log(balanceAmount)
+        const balanceAmount = ref(null)
+        console.log(cesspoolSC)
         const stakedAmount = ref(null)
         const earningsAfterFee = ref(null)
         const ror = ref(null)
@@ -122,6 +123,7 @@ export default {
             const amount = await cesspoolSC.balanceOf(store.state.address);
             const result = amount / 1e18
             balanceAmount.value = result
+            console.log(balanceAmount)
             getData()
             return  stakedAmount, balanceAmount
         }
@@ -135,14 +137,14 @@ export default {
             const amount = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals));
             const lockAmount = amount
 
-            const transactionAllowance = await cesspoolSC.allowance(store.state.address, cessVaultAddress.toString())
+            const transactionAllowance = await cesspoolSC.allowance(store.state.address, pswapCessBnbVaultAddress.toString())
 
             const allowanceAmount = transactionAllowance.toString()
 
-
+            console.log(allowanceAmount)
             if (Number(allowanceAmount) < Number(lockAmount)) {
 
-                const transactionApprove = await cesspoolSC.approve(cessVaultAddress.toString(), "1000000000000000000000000000")
+                const transactionApprove = await cesspoolSC.approve(pswapCessBnbVaultAddress.toString(), "1000000000000000000000000000")
                 console.log(transactionApprove)
             }
 
@@ -161,6 +163,7 @@ export default {
             const transactionUnlock = await cess4cessSC.extractLiquidity()
             await transactionUnlock.wait()
 
+            store.state.modal["loadingModal"] = true
             const link =  `https://bscscan.com/tx/${transactionUnlock.hash}`
             store.state.modal["loadingModal"] = false
             store.state.modal["txnModal"]["hash"] = link;
@@ -205,11 +208,7 @@ export default {
                 // ROR formula
                 const reward = rewardPerBlock / 1e18
                 const tokensPerDay = reward * 28780 // <- blocks per day
-                const i = 2/totalLiquidityLocked 
-                const v = tokensPerDay*i
-                const rorDay = v/2;
-                const rorYear = rorDay*365 * 1e20
-                ror.value = rorYear.toFixed(2)
+                ror.value = tokensPerDay.toFixed(2)
 
                 // time remaining formula
                 const currentTime = await provider.getBlock(currentBlock)
@@ -229,15 +228,10 @@ export default {
             } else {
 
                 const rewardPerBlock = await cess4cessSC.rewardPerBlock()
-                const totalLiquidityLocked = await cess4cessSC.totalLiquidityLocked()
 
                 const reward = rewardPerBlock / 1e18
                 const tokensPerDay = reward * 28780 // <- blocks per day
-                const i = 2/totalLiquidityLocked 
-                const v = tokensPerDay*i
-                const rorDay = v/2;
-                const rorYear = rorDay*365 * 1e20
-                ror.value = rorYear.toFixed(2)
+                ror.value = tokensPerDay.toFixed(2)
 
                 return ror
             }
@@ -279,7 +273,6 @@ export default {
     }
 }
 </script>
-
 <style lang="scss" scoped>
     @import './styles/style.scss';
 </style>

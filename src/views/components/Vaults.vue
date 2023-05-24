@@ -2,7 +2,7 @@
   <div id="vaults_container">
     <div id="grid">
       <ul><li><CESS4CESS/></li></ul>
-      <!--<ul><li><CESSLP/></li></ul>-->
+      <ul><li><PSWAPCESSBNB/></li></ul>
     </div>
   </div>
 </template>
@@ -10,13 +10,13 @@
 <script>
 
 import CESS4CESS from './vaults/CESS4CESS.vue'
-//import CESSLP from './vaults/CESSLP.vue'
+import PSWAPCESSBNB from './vaults/PSWAPCESSBNB.vue'
 
 export default {
     name: "vaults",
     components: {
         CESS4CESS,
-        //CESSLP
+        PSWAPCESSBNB
     }
 }
 </script>

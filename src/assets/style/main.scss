@@ -1,43 +1,47 @@
-
 $background-color: rgb(0, 0, 0);
-$primary-color: rgb(186, 253, 0);
-$secondary-color: rgb(255, 0, 149);
-$text-primary: rgb(255, 255, 255);
+$primary-color: rgb(0, 253, 211);
+$secondary-color: rgb(68, 0, 131);
+$text-primary: rgb(255, 0, 85);
+$green-color: rgb(54, 54, 54);
+$slimy-color: rgb(156, 204, 101);
 
 * {
   margin: 0 !important;
   ::-webkit-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     display: none;
   }
 }
 
 body {
-  background-color: $background-color;
+  background-image: url('./assets/img/dusky.webp');
   width: 100% !important;
-  font-family: myFirstFont;
-  //background-image: url('~@/assets/img/checkered.webp');
-  background-size: contain; 
-  background-repeat: round; 
-  background-attachment: scroll;
+  font-family: pFont;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
+
 a {
   color: $text-primary;
 }
+
 a:hover {
   color: $secondary-color;
 }
+
 #app {
   text-align: center;
   color: $text-primary;
   margin: 0;
-  width: 100%; 
+  width: 100%;
 }
+
 #app-container {
   background-color: rgba(9, 10, 10, 0.925);
-  
 }
+
 #router-container {
   width: 100%;
   display: inline-block;
@@ -45,6 +49,7 @@ a:hover {
   justify-content: center;
   text-align: center;
 }
+
 #user-container {
   display: flex;
   align-items: center;
@@ -54,16 +59,14 @@ a:hover {
   width: 100%;
   margin: 0 auto;
   background-color: rgba(109, 109, 109, 0.925);
-  //background-image: require('~@/img/checkered.webp');
-  //@debug: url('~@/assets/img/game.webp');
   filter: hue-rotate(10deg);
   filter: invert(100%);
-  background-size: fill; 
-  background-repeat: round; 
+  background-size: fill;
+  background-repeat: round;
   background-attachment: fixed;
-  
 }
 
+.nav-top,
 .nav-middle {
   display: flex;
   position: fixed;
@@ -72,90 +75,71 @@ a:hover {
   padding: 2px 0;
   transition: .2s ease all;
   width: 100%;
-  top: 0;
   margin: 0 auto;
-  background-color: rgb(0, 0, 0);
-  
-  #swt-nav {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      color: $text-primary;
-      font-size: .9em;
-      bottom: 0;
-      list-style: none;
-      padding-inline-start: 0px;
-      padding: 0 20px;
-
-      @media (min-width: 400px) {
-        font-size: 1em;
-      }
-      @media (min-width: 750px) {
-        font-size: 1.5em;
-      }
-
-      li {
-        padding: 5px 5px;
-        color:$text-primary;
-        @media (min-width: 750px) {
-          padding: 5px 20px;
-        }
-      }
-      button {
-
-        a {
-          color: black;
-        }
-      }
-    }
+  background-color: $green-color;
 }
 
-.login-container {
-  display: inline-block;
+#swt-nav {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: $text-primary;
+  font-size: .9em;
+  bottom: 0;
+  list-style: none;
+  padding-inline-start: 0px;
+  padding: 0 20px;
+
+  @media (min-width: 400px) {
+    font-size: 1em;
+  }
+  @media (min-width: 750px) {
+    font-size: 1.5em;
+  }
+
+  li {
+    padding: 5px 5px;
+
+    @media (min-width: 750px) {
+      padding: 5px 20px;
+    }
+  }
+
+  button a {
+    color: black;
+  }
+}
+
+.login_container {
+  display: block;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 20px;
-  background-color: $background-color;
+  background-color: $green-color;
 }
 
-
-/* CSS */
 button {
   align-items: center;
   appearance: none;
-  background-image: radial-gradient(100% 100% at 100% 0, #b3ff00 0, #778b00 100%);
+  background-image: radial-gradient(100% 100% at 100% 0, $slimy-color 0, $green-color 100%);
   border: 0;
-  border-radius: 6px;
-  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(116, 116, 116, 0.5) 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: rgb(0, 0, 0);
-  cursor: pointer;
-  display: inline-flex;
-  font-family: "JetBrains Mono",monospace;
   height: 38px;
   justify-content: center;
   line-height: 1;
   list-style: none;
-  overflow: hidden;
-  padding-left: 10px;
-  padding-right: 10px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition: box-shadow .15s,transform .15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow,transform;
+  will-change: box-shadow, transform;
+}
+
+button {
   font-size: 10px;
+
   @media (min-width: 400px) {
     font-size: 14px;
   }
   @media (min-width: 750px) {
     font-size: 18px;
-
   }
 }
 
@@ -164,7 +148,7 @@ button:focus {
 }
 
 button:hover {
-  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #ff0080 0 -3px 0 inset;
+  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #ff0000 0 -3px 0 inset;
   transform: translateY(-2px);
 }
 
@@ -173,19 +157,16 @@ button:active {
   transform: translateY(2px);
 }
 
-#nav a.router-link-exact-active {
-  color: #ff7b00;
-}
 .modal-container-login {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.637);
-
-  
 }
+
 .nft-modal {
   max-width: 8em;
+
   @media (min-width: 450px) {
     max-width: 15em;
   }
@@ -195,113 +176,246 @@ button:active {
 }
 
 .modal-container {
-display: flex;
-justify-content: center;
-align-items: center;
-//background-color: rgb(63, 109, 107);
-background-image: -webkit-radial-gradient(
-  rgba(132, 146, 0, 0.521),
-  rgba(177, 0, 97, 0.39),
-  rgba(0, 0, 0, 0.432)
-);
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(54, 54, 54, 0.39);
 }
 
 .modal-content {
-display: flex;
-flex-direction: column;
-margin: 0 1rem;
-padding: 1rem;
--webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
--moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  margin: 0 1rem;
+  padding: 1rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  background: #fff;
 }
+
 .modal-content-transfer {
-display: flex;
-flex-direction: column;
-margin: 0 1rem;
-padding: 1rem;
-background-color: black;
--webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
--moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-p {
-  padding: 10px;
-}
+  display: flex;
+  flex-direction: column;
+  margin: 0 1rem;
+  padding: 1rem;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+
+  p {
+    padding: 10px;
+  }
 }
 
 .modal-container-details {
-display: flex;
-justify-content: center;
-align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .modal-content-details {
-position: relative;
-display: flex;
-flex-direction: column;
-margin: 0 1rem;
-padding: 1rem;
-border: 1px solid #e2e8f0;
-border-radius: 0.25rem;
-background: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 1rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  background: #fff;
 }
+
 .modal__title {
-font-size: 23.5rem;
-font-weight: 900;
+  color: black;
+  font-size: 1rem;
+  font-weight: 900;
 }
+
+.modal_login {
+  color: white;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.modal__content {
+  color: black;
+
+  a {
+    color: rgb(255, 0, 119);
+  }
+
+  a:hover {
+    color: purple;
+  }
+}
+
 .center {
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ padding: 20px;
 }
+
 .wave {
-width: 5px;
-height: 50px;
-background: linear-gradient(45deg, rgb(255, 217, 0), #fff);
-margin: 15px;
-animation: wave 1s linear infinite;
-border-radius: 20px;
+  width: 5px;
+  height: 50px;
+  background: linear-gradient(45deg, $green-color, #fff);
+  margin: 15px;
+  animation: wave 1s linear infinite;
+  border-radius: 20px;
 }
+
 .wave:nth-child(2) {
-animation-delay: 0.1s;
+  animation-delay: 0.1s;
 }
+
 .wave:nth-child(3) {
-animation-delay: 0.2s;
+  animation-delay: 0.2s;
 }
+
 .wave:nth-child(4) {
-animation-delay: 0.3s;
+  animation-delay: 0.3s;
 }
+
 .wave:nth-child(5) {
-animation-delay: 0.4s;
+  animation-delay: 0.4s;
 }
+
 .wave:nth-child(6) {
-animation-delay: 0.5s;
+  animation-delay: 0.5s;
 }
+
 .wave:nth-child(7) {
-animation-delay: 0.6s;
+  animation-delay: 0.6s;
 }
+
 .wave:nth-child(8) {
-animation-delay: 0.7s;
+  animation-delay: 0.7s;
 }
+
 .wave:nth-child(9) {
-animation-delay: 0.8s;
+  animation-delay: 0.8s;
 }
+
 .wave:nth-child(10) {
-animation-delay: 0.9s;
+  animation-delay: 0.9s;
 }
 
 @keyframes wave {
-0% {
-  transform: scale(0);
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
 }
-50% {
-  transform: scale(1);
+
+.title_container {
+  background-color: $green-color;
+  color: black;
 }
-100% {
-  transform: scale(0);
+
+.content_container {
+  background-color: $green-color;
+  color: white;
 }
+
+.header_container {
+  padding: 10px;
 }
+
+.writeup_container {
+  padding: 10px;
+}
+
+.box_container {
+  width: 100%;
+  height: 100%;
+}
+
+.grid_container {
+  padding: 5px;
+
+  @media (min-width: 768px) {
+    padding: 50px;
+  }
+
+  @media (min-width: 960px) {
+    padding: 50px;
+  }
+
+  background-color: $green-color;
+  border-radius: 10px;
+}
+
+.box_content {
+  border-radius: 10px;
+}
+
+#vault_container {
+  text-align: center;
+
+  #staking_container {
+    border-radius: 10px;
+    padding: 5%;
+    background-color: $green-color;
+
+    @media (min-width: 768px) {
+      padding: 7%;
+    }
+
+    @media (min-width: 960px) {
+      padding: 10%;
+    }
+
+    h1 {
+      font-family: headerFont;
+      font-size: 0.9em;
+      text-shadow: grey;
+      padding: 10%;
+
+      @media (min-width: 768px) {
+        font-size: 1em;
+        padding: 5%;
+      }
+
+      @media (min-width: 960px) {
+        font-size: 1.2em;
+        padding: 2%;
+      }
+    }
+
+    p {
+      font-family: pFont;
+      font-size: 0.6em;
+      padding: 10px;
+
+      @media (min-width: 768px) {
+        font-size: 0.7em;
+      }
+
+      @media (min-width: 960px) {
+        font-size: 0.8em;
+      }
+    }
+
+    button {
+      padding: 10px;
+      border: 10px;
+      font-size: 0.7em;
+
+      @media (min-width: 768px) {
+        font-size: 0.9em;
+        padding: 10px;
+      }
+
+      @media (min-width: 960px) {
+        font-size: 1em;
+        padding: 25px;
+      }
+    }
+  }
+}
+
 @font-face {
   font-family: myFirstFont;
   src: url(./assets/fonts/b.ttf);
@@ -322,4 +436,3 @@ animation-delay: 0.9s;
   font-family: wildFont;
   src: url(./assets/fonts/i.ttf);
 }
-
