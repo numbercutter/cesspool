@@ -45,16 +45,14 @@ import { useStore } from 'vuex';
 import { computed, onMounted } from 'vue';
 import { ethers } from "ethers";
 import GetBalance from './components/GetBalance.vue';
-
-
-
+import { handleLogin, handleCurrentUser, handleAccountChange, setupNetworkChangeListener, setupAccountChangeListener } from './api/ethersConnect';
 
 export default {
   name: 'App',
   components: {
     VueFinalModal,
     GetBalance,
-},
+  },
   setup() {
     const store = useStore()
 
@@ -66,74 +64,14 @@ export default {
       loginModal: false
     }
 
-    const setModal = (modal) => store.commit('setModal', modal)
-    const setUser = (payload) => store.commit('setUser', payload)
-    const setAccountAddress = (address) => store.commit('setAccountAddress', address)
-    const setProvider = (provider) => store.commit('setProvider', provider)
-
-    setModal(modals)
+    store.commit('setModal', modals)
 
     const metaLogin = async () => {
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-        
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner()
-        const accounts = await provider.listAccounts();
-        setProvider(provider)
-        setUser(signer)
-        setAccountAddress(accounts[0])
-        
-      } catch (error) {
-        store.state.modal["loginModal"] = true
-      }
+      await handleLogin(store);
     }
 
-    const handleCurrentUser = async () => {
-      const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-      const chain = await provider.getNetwork(1)
-      if (chain.name != "bnb") {
-          store.state.modal["messageModal"]["message"] = "switching network...";
-          store.state.modal["messageModal"]["status"] = true;
-          window.ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [{
-                  chainId: "0x38",
-                  rpcUrls: ['https://bsc-dataseed1.binance.org/'],
-                  chainName: "Smart Chain",
-                  nativeCurrency: {
-                      name: "BNB",
-                      symbol: "BNB",
-                      decimals: 18
-                  },
-                  blockExplorerUrls: ["https://bscscan.com"]
-              }]
-          });
-        }
-      const accounts = await provider.listAccounts();
-      
-      if (accounts.length > 0) {
-        const signer = provider.getSigner()
-        setProvider(provider)
-        setUser(signer)
-        setAccountAddress(accounts[0])
-      } else {
-        store.state.modal["loginModal"] = true
-      }
-    }
     window.ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          const signer = provider.getSigner()
-          setProvider(provider)
-          setUser(signer)
-          setAccountAddress(accounts[0])
-        } else {
-          store.state.modal["loginModal"] = true
-          console.log("accountlenght")
-          setProvider(null)
-          setUser(0)
-          setAccountAddress(null)
-        }
+        handleAccountChange(store, accounts);
     });
     
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -145,7 +83,9 @@ export default {
     });
 
     onMounted(() => {
-      handleCurrentUser()
+      handleCurrentUser(store);
+      setupNetworkChangeListener();
+      setupAccountChangeListener();  // Add this line
     })
     return {
       metaLogin,
@@ -156,9 +96,8 @@ export default {
     }
   }
 }
-
-
 </script>
+
 <style lang="scss">
 @import "./styles/main.scss";
 
