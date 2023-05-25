@@ -104,7 +104,6 @@ export default {
         const lockNumber = ref(1)
         const days = ref(1)
         const balanceAmount = ref(null)
-        console.log(cesspoolSC)
         const stakedAmount = ref(null)
         const earningsAfterFee = ref(null)
         const ror = ref(null)
@@ -141,7 +140,6 @@ export default {
 
             const allowanceAmount = transactionAllowance.toString()
 
-            console.log(allowanceAmount)
             if (Number(allowanceAmount) < Number(lockAmount)) {
 
                 const transactionApprove = await cesspoolSC.approve(pswapCessBnbVaultAddress.toString(), "1000000000000000000000000000")
@@ -273,6 +271,7 @@ export default {
     }
 }
 </script>
+
 <style lang="scss" scoped>
     @import '../styles/vaultstyle.scss';
 </style>

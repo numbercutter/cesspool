@@ -41,7 +41,7 @@
                         <slider v-model="days" color="black" track-color="green" :height='15' :max="365" :min="1"/>
                         <span><p>Locking Time (BETWEEN 1 AND 365 DAYS): <span class="fill"> {{ days }}  </span> DAY(S)</p></span>
                         <br>
-                        <button @click="lockLiq">Stake</button>
+                        <button @click="lockLiquidity">Stake</button>
                     </div>
                     <template v-if="isStaked">
                         <div class="unlock">
@@ -51,9 +51,9 @@
 
                             <br>
                             <template v-if="isUnlocked">
-                                <button @click="extractLiquidity">Unstake</button>
+                                <button @click="extractLiquidityFunction">Unstake</button>
                             </template>
-                            <button @click="extractEarnings">Collect Earnings</button>
+                            <button @click="extractEarningsFunction">Collect Earnings</button>
                         </div>
                     </template>
                     <br>
@@ -65,7 +65,7 @@
                     <h1>CESS4CESS VAULT</h1>
                     <span><p>Aprox. APR/yr: <span class="fill"> {{ ror }}  </span> %</p></span>
                     <p>You must own $CESS token to utilize this vault...</p>
-                    <button @click="extractLiquidity">BUY HERE</button>
+                    <button @click="extractLiquidityFunction">BUY HERE</button>
                     <button @click="vaultModal = false">Close</button>
                 </div>
             </template>
@@ -79,9 +79,9 @@ import { cessVaultAddress, cessVaultABI } from '../contracts/cess4cess.sol/cess4
 import { ref, onMounted, computed, watch } from 'vue'
 import { useStore } from "vuex";
 import slider from "vue3-slider"
-import { BigNumber } from 'ethers';
-//import { ethers } from "ethers";
 import { VueFinalModal } from "vue-final-modal";
+import { lockLiq, extractLiquidity, extractEarnings, getStaked } from '../api/stakingApi'
+
 
 
 export default {
@@ -103,7 +103,6 @@ export default {
         const lockNumber = ref(1)
         const days = ref(1)
         const balanceAmount = ref(store.state.cess)
-        console.log(balanceAmount)
         const stakedAmount = ref(null)
         const earningsAfterFee = ref(null)
         const ror = ref(null)
@@ -111,70 +110,22 @@ export default {
         const vaultModal = ref(false)
 
 
-        const getStaked = async () => {
-            
-            const transactionStaked = await cess4cessSC.getAmountLocked(store.state.address)
-            const num2 = transactionStaked.toString()
-            const cess2 = num2 / 1e18
-            const rounded2 = Number(cess2.toFixed(2));
-            stakedAmount.value = rounded2 - rounded2 % 1;
-
-            const amount = await cesspoolSC.balanceOf(store.state.address);
-            const result = amount / 1e18
-            balanceAmount.value = result
+        const getStakedData = async () => {
+            const stakingData = await getStaked(store, cess4cessSC, cesspoolSC);
+            stakedAmount.value = stakingData.stakedAmount;
+            balanceAmount.value = stakingData.balanceAmount;
             getData()
-            return  stakedAmount, balanceAmount
         }
 
-        const lockLiq = async () => {
-
-            store.state.modal["loadingModal"] = true
-            const lockTime = days.value*86400 // number of seconds locked * total seconds in a day
-            const decimals = 18;
-            const input = lockNumber.value;
-            const amount = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals));
-            const lockAmount = amount
-
-            const transactionAllowance = await cesspoolSC.allowance(store.state.address, cessVaultAddress.toString())
-
-            const allowanceAmount = transactionAllowance.toString()
-
-
-            if (Number(allowanceAmount) < Number(lockAmount)) {
-
-                const transactionApprove = await cesspoolSC.approve(cessVaultAddress.toString(), "1000000000000000000000000000")
-                console.log(transactionApprove)
-            }
-
-            const transactionLock = await cess4cessSC.lockLiquidity(lockAmount, lockTime.toString())
-            await transactionLock.wait()
-            const link =  `https://bscscan.com/tx/${transactionLock.hash}`
-
-            store.state.modal["loadingModal"] = false
-            store.state.modal["txnModal"]["hash"] = link;
-            store.state.modal["txnModal"]["status"] = true;
-
-
+        const lockLiquidity = async () => {
+            await lockLiq(store, cesspoolSC, cessVaultAddress, cess4cessSC, lockNumber.value, days.value)
         }
-        const extractLiquidity = async () => {
-            store.state.modal["loadingModal"] = true
-            const transactionUnlock = await cess4cessSC.extractLiquidity()
-            await transactionUnlock.wait()
-
-            const link =  `https://bscscan.com/tx/${transactionUnlock.hash}`
-            store.state.modal["loadingModal"] = false
-            store.state.modal["txnModal"]["hash"] = link;
-            store.state.modal["txnModal"]["status"] = true;
-
+        const extractLiquidityFunction = async () => {
+            await extractLiquidity(store, cess4cessSC);
         }
-        const extractEarnings = async () => {
-            store.state.modal["loadingModal"] = true
-            const earnings = await cess4cessSC.extractEarnings()
-            await earnings.wait()
-            const link =  `https://bscscan.com/tx/${earnings.hash}`
-            store.state.modal["loadingModal"] = false
-            store.state.modal["txnModal"]["hash"] = link;
-            store.state.modal["txnModal"]["status"] = true;
+
+        const extractEarningsFunction = async () => {
+            await extractEarnings(store, cess4cessSC);
         }
 
         const getData = async() => {
@@ -245,7 +196,7 @@ export default {
         const checkCurrentUser = () => {
             console.log(provider)
             if (provider) {
-                getStaked()
+                getStakedData()
             } else {
                 store.state.modal["loginModal"] = true;
                 getData()
@@ -253,7 +204,7 @@ export default {
             }
 
         watch(()=>store.getters.cess, function() {
-            getStaked()
+            getStakedData()
         });
 
         onMounted(() => {
@@ -261,9 +212,9 @@ export default {
         })
 
         return { 
-            lockLiq,
-            extractLiquidity,
-            extractEarnings,
+            lockLiquidity,
+            extractLiquidityFunction,
+            extractEarningsFunction,
             lockNumber,
             earningsAfterFee,
             ror,
