@@ -1,7 +1,7 @@
 $background-color: rgb(0, 0, 0);
 $primary-color: rgb(0, 253, 211);
 $secondary-color: rgb(68, 0, 131);
-$text-primary: rgb(255, 0, 85);
+$text-primary: rgb(255, 0, 149);
 $green-color: rgb(54, 54, 54);
 $slimy-color: rgb(156, 204, 101);
 
@@ -15,7 +15,6 @@ $slimy-color: rgb(156, 204, 101);
 }
 
 body {
-  background-image: url('./assets/img/dusky.webp');
   width: 100% !important;
   font-family: pFont;
   background-size: cover;
@@ -130,6 +129,9 @@ button {
   line-height: 1;
   list-style: none;
   will-change: box-shadow, transform;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.2); /* Adds a slight depth to button */
+  transition: all 0.3s ease; /* Smoother transition */
+  border-radius: 5px; /* To make it less blocky */
 }
 
 button {
@@ -148,13 +150,13 @@ button:focus {
 }
 
 button:hover {
-  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #ff0000 0 -3px 0 inset;
-  transform: translateY(-2px);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.3); /* Increases shadow size */
+  transform: translateY(-5px); /* Moves button upwards */
 }
 
 button:active {
-  box-shadow: #4a4a4a 0 3px 7px inset;
-  transform: translateY(2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2); /* Reduce shadow size */
+  transform: translateY(2px); /* Moves button downwards */
 }
 
 .modal-container-login {
@@ -356,8 +358,9 @@ button:active {
 
   #staking_container {
     border-radius: 10px;
-    padding: 5%;
     background-color: $green-color;
+    padding: 5%; /* Relative padding to ensure the content fits */
+
 
     @media (min-width: 768px) {
       padding: 7%;
@@ -368,11 +371,10 @@ button:active {
     }
 
     h1 {
-      font-family: headerFont;
-      font-size: 0.9em;
-      text-shadow: grey;
-      padding: 10%;
-
+      font-family: pFont;
+      font-size: 1.5rem; /* Bigger, more readable font size */
+      text-shadow: 1px 1px 2px grey; /* Need to specify x and y offset for shadow */
+      padding: 2%;
       @media (min-width: 768px) {
         font-size: 1em;
         padding: 5%;
@@ -386,8 +388,8 @@ button:active {
 
     p {
       font-family: pFont;
-      font-size: 0.6em;
-      padding: 10px;
+      font-size: 1rem; /* Bigger, more readable font size */
+      padding: 1rem;
 
       @media (min-width: 768px) {
         font-size: 0.7em;
@@ -399,10 +401,10 @@ button:active {
     }
 
     button {
-      padding: 10px;
-      border: 10px;
-      font-size: 0.7em;
-
+      padding: 1rem; /* Smaller padding to make the button smaller */
+      border: none;
+      font-size: 1rem;
+      border-radius: 5px; /* Added for smoother buttons */
       @media (min-width: 768px) {
         font-size: 0.9em;
         padding: 10px;

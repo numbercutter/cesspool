@@ -160,5 +160,9 @@ export default {
 
 </script>
 <style lang="scss">
-@import "./assets/style/main.scss";
+@import "./styles/main.scss";
+
+body {
+  background-image: url('./assets/img/dusky.webp');
+}
 </style>

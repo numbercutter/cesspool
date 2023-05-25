@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Vaults from './components/Vaults.vue'
+import Vaults from '../components/Vaults.vue'
 export default {
   name: 'Home',
   components: {
@@ -96,7 +96,6 @@ export default {
 
 .outer {
   padding: 50px 0px 0px;
-  background-image: url('./assets/img/dusky.webp');
   background-size: cover; 
   background-attachment: fixed;
   color: black;

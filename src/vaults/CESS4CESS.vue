@@ -36,9 +36,9 @@
                         <span><p>Aprox. APR/yr: <span class="fill"> {{ ror }}  </span> %</p></span>
                     </div>
                     <div class="lock">
-                        <slider v-model="lockNumber" color="black" track-color="pink" :height='15' :max="balanceAmount" :min="0"/>
+                        <slider v-model="lockNumber" color="black" track-color="green" :height='15' :max="balanceAmount" :min="0"/>
                         <span><p>Locking Amount: <span class="fill"> {{ lockNumber }}  </span> $CESS</p></span>
-                        <slider v-model="days" color="black" track-color="red" :height='15' :max="365" :min="1"/>
+                        <slider v-model="days" color="black" track-color="green" :height='15' :max="365" :min="1"/>
                         <span><p>Locking Time (BETWEEN 1 AND 365 DAYS): <span class="fill"> {{ days }}  </span> DAY(S)</p></span>
                         <br>
                         <button @click="lockLiq">Stake</button>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { cessVaultAddress, cessVaultABI } from './contracts/cess4cess.sol/cess4cess.js';
+import { cessVaultAddress, cessVaultABI } from '../contracts/cess4cess.sol/cess4cess';
 import { ref, onMounted, computed, watch } from 'vue'
 import { useStore } from "vuex";
 import slider from "vue3-slider"
@@ -281,5 +281,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    @import './styles/style.scss';
+    @import '../styles/vaultstyle.scss';
 </style>
