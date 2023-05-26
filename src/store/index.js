@@ -5,6 +5,7 @@ const store = createStore({
   state () {
     return {
       user: {},
+      isAuthenticated: false,
       address: null,
       provider: null,
       nfts: [],
@@ -21,11 +22,13 @@ const store = createStore({
     },
     cess(state) {
       return state.cess
-    }
+    },
+    isAuthenticated: (state) => state.isAuthenticated,
   },
   mutations: {
     setUser (state, payload) {
       state.user = payload
+      state.isAuthenticated = !!payload // Use payload instead of user
     },
     setAccountAddress (state, address) {
       state.address = address

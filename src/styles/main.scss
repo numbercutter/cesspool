@@ -67,8 +67,10 @@ a:hover {
 
 .nav-top,
 .nav-middle {
-  display: flex;
+
   position: fixed;
+  z-index: 1000;
+  top: 0;
   align-items: center;
   justify-content: center;
   padding: 2px 0;
@@ -416,6 +418,9 @@ button:active {
       }
     }
   }
+}
+.nav-lower {
+  margin-top: 40px;
 }
 
 @font-face {

@@ -4,7 +4,7 @@
         v-model="modal.loginModal"
         classes="modal-container-login"
         content-class="modal-content-login"
-      >
+    >
         <div class="modal__content">
           <p>You must be logged in via MetaMask or WalletConnect to utilize the CESSPOOL Vaults</p>
         </div>
@@ -18,27 +18,20 @@
         <p>{{modal.messageModal.message}}</p>
       </div>
     </VueFinalModal>
-    <template v-if="isAuthenticated">
-      <nav class="nav-middle">
-        <ul id="swt-nav">
-          <li>Connected</li>
-          <li>{{ address.slice(0, 4) }}...{{ address.slice(address.length - 4) }}  </li>
-          <li><GetBalance/></li>
-        </ul>
-      </nav>
-      <router-view/>
-    </template>
-    <template v-else>
-      <nav class="nav-middle">
-        <ul id="swt-nav">
-          <li><button @click="metaLogin">Metamask</button></li>
-        </ul>
-      </nav>
-    </template>
+    <nav class="nav-middle">
+      <ul id="swt-nav">
+        <li v-if="isAuthenticated">Connected</li>
+        <li v-if="isAuthenticated">{{ address.slice(0, 4) }}...{{ address.slice(address.length - 4) }}  </li>
+        <li v-if="isAuthenticated"><GetBalance/></li>
+        <li v-else><button @click="metaLogin">Metamask</button></li>
+      </ul>
+    </nav>
+    <nav class="nav-lower">
+      <Navigation :is-authenticated="isAuthenticated" />
+    </nav>
+    <router-view/>
   </div>
-  
 </template>
-
 <script>
 import { VueFinalModal } from "vue-final-modal";
 import { useStore } from 'vuex';
@@ -46,12 +39,14 @@ import { computed, onMounted } from 'vue';
 import { ethers } from "ethers";
 import GetBalance from './components/GetBalance.vue';
 import { handleLogin, handleCurrentUser, handleAccountChange, setupNetworkChangeListener, setupAccountChangeListener } from './api/ethersConnect';
+import Navigation from './components/Navigation.vue'; // Import Navigation
 
 export default {
   name: 'App',
   components: {
     VueFinalModal,
     GetBalance,
+    Navigation, // Add Navigation to components
   },
   setup() {
     const store = useStore()
