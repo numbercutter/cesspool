@@ -1,13 +1,14 @@
 <template>
     <header :class="{ 'scrolled-nav': scrolledNav }">
       <nav>
+        <div class="icon">
+          <i @click="toggleMobileNav" v-show="mobile" class="fas fa-bars" :class="{ 'icon-active': mobileNav }"></i>
+        </div>
         <ul v-show="!mobile" class="navigation">
           <li><router-link to="/">Home</router-link></li>
           <li v-if="isAuthenticated"><router-link to="/staking">Staking</router-link></li>
         </ul>
-        <div class="icon">
-          <i @click="toggleMobileNav" v-show="mobile" class="fas fa-bars" :class="{ 'icon-active': mobileNav }"></i>
-        </div>
+        
         <transition name="mobile-nav">
           <ul v-show="mobileNav" class="dropdown-nav">
             <li @click="toggleMobileNav"><router-link to="/">Home</router-link></li>
@@ -68,14 +69,24 @@
     padding: 10px;
     background-color: rgb(116, 116, 116);
   }
+
+  @media screen and (max-width: 750px) {
+    header {
+      top: auto;
+      bottom: 0;
+    }
+  }
   
   nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 0;
-    width: 100%;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 15px 0;
+      width: 100%;
   }
+
+
   
   .navigation,
   .dropdown-nav {
@@ -87,6 +98,7 @@
   .dropdown-nav li {
     padding: 8px;
   }
+
   
   .icon {
     cursor: pointer;
@@ -102,10 +114,11 @@
     position: fixed;
     max-width: 150px;
     height: 100%;
-    top: 34px;
+    bottom: 0;
     left: 0;
     background-color: #000000;
   }
+
   
   .scrolled-nav {
     background-color: rgb(0, 238, 255);

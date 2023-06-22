@@ -6,7 +6,7 @@
         content-class="modal-content-login"
     >
         <div class="modal__content">
-          <p>You must be logged in via MetaMask or WalletConnect to utilize the CESSPOOL Vaults</p>
+          <p>You must be logged in via MetaMask to utilize the CESSPOOL Vaults</p>
         </div>
     </VueFinalModal>
     <VueFinalModal
