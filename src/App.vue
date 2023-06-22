@@ -4,9 +4,9 @@
         v-model="modal.loginModal"
         classes="modal-container-login"
         content-class="modal-content-login"
-      >
+    >
         <div class="modal__content">
-          <p>You must be logged in via MetaMask or WalletConnect to utilize the CESSPOOL Vaults</p>
+          <p>You must be logged in via MetaMask to utilize the CESSPOOL Vaults</p>
         </div>
     </VueFinalModal>
     <VueFinalModal
@@ -18,43 +18,36 @@
         <p>{{modal.messageModal.message}}</p>
       </div>
     </VueFinalModal>
-    <template v-if="isAuthenticated">
-      <nav class="nav-middle">
-        <ul id="swt-nav">
-          <li>Connected</li>
-          <li>{{ address.slice(0, 4) }}...{{ address.slice(address.length - 4) }}  </li>
-          <li><GetBalance/></li>
-        </ul>
-      </nav>
-      <router-view/>
-    </template>
-    <template v-else>
-      <nav class="nav-middle">
-        <ul id="swt-nav">
-          <li><button @click="metaLogin">Metamask</button></li>
-        </ul>
-      </nav>
-    </template>
+    <nav class="nav-middle">
+      <ul id="swt-nav">
+        <li v-if="isAuthenticated">Connected</li>
+        <li v-if="isAuthenticated">{{ address.slice(0, 4) }}...{{ address.slice(address.length - 4) }}  </li>
+        <li v-if="isAuthenticated"><GetBalance/></li>
+        <li v-else><button @click="metaLogin">Metamask</button></li>
+      </ul>
+    </nav>
+    <nav class="nav-lower">
+      <Navigation :is-authenticated="isAuthenticated" />
+    </nav>
+    <router-view/>
   </div>
-  
 </template>
-
 <script>
 import { VueFinalModal } from "vue-final-modal";
 import { useStore } from 'vuex';
 import { computed, onMounted } from 'vue';
 import { ethers } from "ethers";
 import GetBalance from './components/GetBalance.vue';
-
-
-
+import { handleLogin, handleCurrentUser, handleAccountChange, setupNetworkChangeListener, setupAccountChangeListener } from './api/ethersConnect';
+import Navigation from './components/Navigation.vue'; // Import Navigation
 
 export default {
   name: 'App',
   components: {
     VueFinalModal,
     GetBalance,
-},
+    Navigation, // Add Navigation to components
+  },
   setup() {
     const store = useStore()
 
@@ -66,74 +59,14 @@ export default {
       loginModal: false
     }
 
-    const setModal = (modal) => store.commit('setModal', modal)
-    const setUser = (payload) => store.commit('setUser', payload)
-    const setAccountAddress = (address) => store.commit('setAccountAddress', address)
-    const setProvider = (provider) => store.commit('setProvider', provider)
-
-    setModal(modals)
+    store.commit('setModal', modals)
 
     const metaLogin = async () => {
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-        
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner()
-        const accounts = await provider.listAccounts();
-        setProvider(provider)
-        setUser(signer)
-        setAccountAddress(accounts[0])
-        
-      } catch (error) {
-        store.state.modal["loginModal"] = true
-      }
+      await handleLogin(store);
     }
 
-    const handleCurrentUser = async () => {
-      const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-      const chain = await provider.getNetwork(1)
-      if (chain.name != "bnb") {
-          store.state.modal["messageModal"]["message"] = "switching network...";
-          store.state.modal["messageModal"]["status"] = true;
-          window.ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [{
-                  chainId: "0x38",
-                  rpcUrls: ['https://bsc-dataseed1.binance.org/'],
-                  chainName: "Smart Chain",
-                  nativeCurrency: {
-                      name: "BNB",
-                      symbol: "BNB",
-                      decimals: 18
-                  },
-                  blockExplorerUrls: ["https://bscscan.com"]
-              }]
-          });
-        }
-      const accounts = await provider.listAccounts();
-      
-      if (accounts.length > 0) {
-        const signer = provider.getSigner()
-        setProvider(provider)
-        setUser(signer)
-        setAccountAddress(accounts[0])
-      } else {
-        store.state.modal["loginModal"] = true
-      }
-    }
     window.ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          const signer = provider.getSigner()
-          setProvider(provider)
-          setUser(signer)
-          setAccountAddress(accounts[0])
-        } else {
-          store.state.modal["loginModal"] = true
-          console.log("accountlenght")
-          setProvider(null)
-          setUser(0)
-          setAccountAddress(null)
-        }
+        handleAccountChange(store, accounts);
     });
     
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -145,7 +78,9 @@ export default {
     });
 
     onMounted(() => {
-      handleCurrentUser()
+      handleCurrentUser(store);
+      setupNetworkChangeListener();
+      setupAccountChangeListener();  // Add this line
     })
     return {
       metaLogin,
@@ -156,9 +91,12 @@ export default {
     }
   }
 }
-
-
 </script>
+
 <style lang="scss">
-@import "./assets/style/main.scss";
+@import "./styles/main.scss";
+
+body {
+  background-image: url('./assets/img/dusky.webp');
+}
 </style>

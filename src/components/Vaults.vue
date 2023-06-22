@@ -9,8 +9,8 @@
 
 <script>
 
-import CESS4CESS from './vaults/CESS4CESS.vue'
-import PSWAPCESSBNB from './vaults/PSWAPCESSBNB.vue'
+import CESS4CESS from '.././vaults/CESS4CESS.vue'
+import PSWAPCESSBNB from '.././vaults/PSWAPCESSBNB.vue'
 
 export default {
     name: "vaults",
@@ -36,8 +36,8 @@ export default {
   #grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  justify-content: center;
-  align-items: center;
+  justify-content: space-around;
+  align-items: start;
   grid-gap: 10px;
   padding: 10px 0px 100px 0px;
   @media (min-width: 400px) {

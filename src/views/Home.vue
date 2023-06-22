@@ -1,118 +1,45 @@
 <template>
-  <body>
-    <div id="home">
-      <div class="outer">
-        <section class="top">
+  <div id="home">
+    <section class="top">
           <div>
             <h1>CESSPOOL</h1>
           </div>
         </section>
-        <section class="middle">
-          <Vaults/>
-        </section>
-      </div>
-    </div>
-  </body>
+    <p>
+      This is a decentralized application for interacting with smart contracts on the Binance Smart Chain (BSC). 
+      Please log in to continue.
+    </p>
+  </div>
 </template>
 
 <script>
-import Vaults from './components/Vaults.vue'
 export default {
-  name: 'Home',
-  components: {
-    Vaults
-  }
+  name: 'Home'
 }
 </script>
 
 <style lang="scss" scoped>
-
 #home {
-  display: inline;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  text-align: center;
-  background-color: honeydew;
-  line-height: 1.5;
-  li {
-    list-style: none;
-    text-decoration: none;
-    
-    font-family: pFont;
-    padding: 0px 2%;
-    font-size: 1.2em;
-    @media (min-width: 400px) {
-        font-size: 1.2em;
-        padding: 0px 5%;
-      }
-    @media (min-width: 750px) {
-      font-size: 1.7em;
-      padding: 0px 10%;
-    }
-    ul {
-          padding-inline-start: 0 !important;
-    }
-  }
-  .bold {
-      font-weight: bold;
-    }
-  /* Inset */
+  align-items: center;
+  height: 100vh;
+  font-family: Arial, sans-serif;
 
-  hr.style-two {
-  border: 0;
-  height: 10px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  h1 {
+    color: #4a4a4a;
   }
-  /* Border Shadow in <hr> tag */
 
-  h2 {
-    font-family: headerFontTwo;
-    font-size: 1.5em;
-    text-shadow: grey;
-    padding: 20px;
-    text-decoration: underline;
-    @media (min-width: 400px) {
-        font-size: 3em;
-      }
-    @media (min-width: 750px) {
-      font-size: 4em;
-    }
-  }
-  h3 {
-    font-family: pFont;
-    font-size: 1.5em;
-    text-shadow: grey;
-      
-    padding: 20px;
-    @media (min-width: 400px) {
-        font-size: 1.5em;
-      }
-    @media (min-width: 750px) {
-      font-size: 3em;
-    }
+  p {
+    color: #9b9b9b;
+    font-size: 18px;
+    text-align: center;
+    max-width: 800px;
+    margin: 20px auto;
   }
 }
 
-
-.outer {
-  padding: 50px 0px 0px;
-  background-image: url('./assets/img/dusky.webp');
-  background-size: cover; 
-  background-attachment: fixed;
-  color: black;
-  //animation: 300s para infinite linear;
-
-}
-@keyframes para {
-  100% {
-    background-position: 
-      -5000px 20%,
-      -800px 95%,
-      500px 50%,
-      1000px 100%,
-      400px 0;
-    }
-  }
 .top {
   //background-image: linear-gradient(rgba(255, 255, 255, 0.705), rgb(0, 0, 0));
 
@@ -155,73 +82,4 @@ export default {
     }
   }
 }
-.middle {
-  //background-image: linear-gradient(rgb(0, 253, 110), rgba(255, 255, 255, 0.788));
-  width: 100%;
-  h1 {
-    font-family: headerFont;
-    font-size: 1.5em;
-    text-shadow: grey;
-    @media (min-width: 400px) {
-        font-size: 2em;
-      }
-    @media (min-width: 750px) {
-      font-size: 3em;
-    }
-  }
-  p {
-    font-family: pFont;
-    padding: 0px 5%;
-    font-size: 1.2em;
-    @media (min-width: 400px) {
-        font-size: 1.2em;
-        padding: 0px 5%;
-      }
-    @media (min-width: 750px) {
-      font-size: 1.7em;
-      padding: 0px 10%;
-    }
-    
-  }
-  
-}
-.bottom {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.788), rgba(255, 241, 173, 0.829));
-  width: 100%;
-  h1 {
-    font-family: headerFont;
-    font-size: 1.5em;
-    text-shadow: grey;
-    @media (min-width: 400px) {
-        font-size: 2em;
-      }
-    @media (min-width: 750px) {
-      font-size: 3em;
-    }
-  }
-  p {
-    font-family: pFont;
-    padding: 0px 5%;
-    font-size: 1.2em;
-    @media (min-width: 400px) {
-        font-size: 1.2em;
-        padding: 0px 5%;
-      }
-    @media (min-width: 750px) {
-      font-size: 1.7em;
-      padding: 0px 10%;
-    }
-  }
-  a {
-    color: black;
-  }
-  a:hover {
-      color: rgb(0, 253, 110);
-    }
-  ul {
-          padding-inline-start: 0 !important;
-    }
-}
-
-
 </style>
